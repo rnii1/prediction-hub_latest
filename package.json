@@ -1,0 +1,13 @@
+{
+  "name": "prediction-hub",
+  "version": "1.0.0",
+  "description": "Football prediction dashboard: scorelines, 1X2, over/under and BTTS from live league data.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20.12"
+  }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prediction Hub 🔥</title>
+  <meta name="description" content="Data-driven football predictions: scorelines, win/draw/loss probabilities, over/under and BTTS.">
+  <meta name="theme-color" content="#120912">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/style.css?v=3">
+</head>
+
+<body>
+
+<nav>
+  <a class="logo" href="#home">⚽ Prediction <span>Hub</span></a>
+
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#predictions">Predictions</a></li>
+    <li><a href="#statistics">Statistics</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <span class="eyebrow">Poisson model · Live league data</span>
+  <h2>Smarter <span class="grad">Football Predictions</span></h2>
+  <p>
+    Likely scorelines, win/draw/loss probabilities, goals and BTTS markets —
+    calculated from each team's home and away record and recent form.
+  </p>
+  <button class="hero-btn" id="heroBtn">View Upcoming Predictions</button>
+</section>
+
+<header id="predictions">
+  <h1>Upcoming <span class="grad">Predictions</span></h1>
+  <p>
+    <span id="matchCount" class="pill"></span>
+    <span id="dataSource" class="pill data-source">Loading…</span>
+    <button id="refreshBtn" class="link-btn" title="Fetch fresh live data">↻ Refresh</button>
+  </p>
+</header>
+
+<section class="top-pick" id="topPick" hidden></section>
+
+<section class="toolbar">
+  <input type="search" id="searchInput" placeholder="Search teams or leagues..." aria-label="Search teams or leagues">
+  <select id="sortSelect" aria-label="Sort matches">
+    <option value="kickoff">Sort: Kick-off</option>
+    <option value="confidence">Sort: Confidence</option>
+    <option value="goals">Sort: Most goals expected</option>
+  </select>
+</section>
+
+<section class="filters" id="filters"></section>
+
+<div class="container" id="matches"></div>
+
+<section class="panel" id="statistics">
+  <div class="panel-head">
+    <h2>📊 Team Statistics</h2>
+    <select id="statsLeague" aria-label="Choose league"></select>
+  </div>
+  <p class="muted">
+    Att / Def compare each team to the league average (1.00).
+    Attack above 1 is better than average; defence below 1 means fewer goals conceded than average.
+  </p>
+  <div class="table-wrap" id="statsTable"></div>
+</section>
+
+<section class="panel" id="about">
+  <h2>🧠 How the predictions work</h2>
+  <ol class="how">
+    <li><strong>Team strength.</strong> Each team's goals scored and conceded per game, at home and away,
+      are divided by the league average to give attack and defence ratings. Teams with only a few games
+      are pulled towards average so one big result doesn't skew them.</li>
+    <li><strong>Expected goals.</strong> Home xG = league home average × home attack × away defence
+      (and the reverse for the away side). Recent form (last 5 results) nudges xG by up to ±12%.</li>
+    <li><strong>Scoreline grid.</strong> A Poisson distribution turns each xG into the chance of scoring
+      0, 1, 2… goals. Every scoreline from 0–0 to 8–8 gets a probability, with a Dixon-Coles correction
+      for the extra draws seen in real football.</li>
+    <li><strong>Markets.</strong> Summing the grid gives home / draw / away, over 2.5 goals, both teams to
+      score, and the most likely exact scores. Confidence is the probability of the top outcome;
+      the rating also rewards a clear gap over the next outcome.</li>
+  </ol>
+  <p class="disclaimer">
+    Predictions are statistical estimates, not guarantees. Football is high-variance, and even a 60%
+    favourite loses or draws 4 times in 10. Not betting advice.
+  </p>
+</section>
+
+<footer>
+  <p>Prediction Hub · Built as a personal sports technology project</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="data/teams.js"></script>
+<script src="data/matches.js"></script>
+<script src="js/model.js"></script>
+<script src="js/render.js"></script>
+<script src="js/api.js"></script>
+<script src="js/script.js"></script>
+
+</body>
+</html>
