@@ -84,8 +84,16 @@ function handleStatic(url, res) {
     }
 
     fs.readFile(file, (err, data) => {
-        if (err) return send(res, 404, "Not found", "text/plain");
-        send(res, 200, data, type);
+        if (!err) return send(res, 200, data, type);
+
+        // Fallback for flat uploads (e.g. GitHub web upload dropped the css/, js/, data/ folders):
+        // look for the same file name in the project root.
+        const flat = path.join(ROOT, path.basename(file));
+        if (flat === file) return send(res, 404, "Not found", "text/plain");
+        fs.readFile(flat, (err2, data2) => {
+            if (err2) return send(res, 404, "Not found", "text/plain");
+            send(res, 200, data2, type);
+        });
     });
 }
 
