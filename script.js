@@ -111,6 +111,13 @@ document.getElementById("filters").addEventListener("click", e => {
     state.selectedLeague = btn.dataset.league;
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b === btn));
     updateMatches();
+
+    // Keep the statistics table on the same league as the filter
+    if (state.dataset.leagues[state.selectedLeague]) {
+        state.statsLeague = state.selectedLeague;
+        document.getElementById("statsLeague").value = state.statsLeague;
+        updateStats();
+    }
 });
 
 document.getElementById("searchInput").addEventListener("input", e => {
@@ -144,25 +151,25 @@ async function init(forceRefresh = false) {
     }
 
     if (!LiveData.isEnabled()) {
-        renderSource("sample", "Sample data · run `node server.js` and open http://localhost:8080 for live fixtures");
+        renderSource("sample", "Sample data Â· run `node server.js` and open http://localhost:8080 for live fixtures");
         return;
     }
 
-    renderSource("loading", "Loading live data…");
+    renderSource("loading", "Loading live dataâ€¦");
 
     try {
         const live = await LiveData.load(forceRefresh);
         if (!live.fixtures.length) {
-            renderSource("sample", "No upcoming live fixtures found · showing sample data");
+            renderSource("sample", "No upcoming live fixtures found Â· showing sample data");
             return;
         }
         loadDataset(live);
         const when = new Date(live.fetchedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        const partial = live.failures?.length ? ` · ${live.failures.length} league(s) failed` : "";
-        renderSource("live", `Live data · football-data.org · updated ${when}${partial}`);
+        const partial = live.failures?.length ? ` Â· ${live.failures.length} league(s) failed` : "";
+        renderSource("live", `Live data Â· football-data.org Â· updated ${when}${partial}`);
     } catch (err) {
         console.error(err);
-        renderSource("error", `Live data unavailable (${err.message}) · showing sample data`);
+        renderSource("error", `Live data unavailable (${err.message}) Â· showing sample data`);
     }
 }
 
